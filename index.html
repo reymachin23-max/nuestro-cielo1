@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Nuestro Cielo & El Rincón de Terius 🌸</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fuentes Románticas y Manuscritas -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --lara-teal: #5ba4a4;
+      --lara-teal-dark: #3f7d7d;
+      --candy-pink: #f48fb1;
+      --cream: #fffdf9;
+    }
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background-color: #fdfbf7;
+      color: #374151;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-serif-title {
+      font-family: 'Playfair Display', serif;
+    }
+    .font-handwriting {
+      font-family: 'Dancing Script', cursive;
+    }
+    /* Animaciones suaves */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    @keyframes wagTail {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(14deg); }
+      75% { transform: rotate(-10deg); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(253, 224, 71, 0.7)); }
+      50% { filter: drop-shadow(0 0 16px rgba(253, 224, 71, 1)); }
+    }
+    .animate-float {
+      animation: floatSlow 3.5s ease-in-out infinite;
+    }
+    .tail-wag {
+      transform-origin: 45px 95px;
+      animation: wagTail 0.6s ease-in-out infinite;
+    }
+    .guardian-glow {
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    /* Efecto Corcho y Polaroid */
+    .corkboard {
+      background-color: #d7b38c;
+      background-image: radial-gradient(#b89065 1.2px, transparent 1.2px), radial-gradient(#c49e74 1.2px, #d7b38c 1.2px);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+    }
+    .polaroid-card {
+      background: #ffffff;
+      padding: 10px 10px 26px 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .polaroid-card:hover {
+      transform: translateY(-4px) rotate(0deg) !important;
+      box-shadow: 0 14px 26px rgba(0,0,0,0.2);
+    }
+    .polaroid-unrevealed {
+      filter: blur(18px) brightness(0.35) sepia(0.4);
+      transition: filter 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .polaroid-revealed {
+      filter: blur(0px) brightness(1) sepia(0);
+      transition: filter 1.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    /* Sombrerero Azul de Lara Jean */
+    .hatbox-bg {
+      background: linear-gradient(145deg, #6db5b5 0%, #488e8e 100%);
+    }
+    /* Scrollbar oculto para navegación limpia */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-24 select-none">
+
+  <!-- BARRA SUPERIOR DE PERFIL Y ESTADO EN VIVO -->
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-pink-100 shadow-sm px-3 py-2.5">
+    <div class="max-w-md mx-auto flex items-center justify-between gap-2">
+      <!-- Selector de Perfil -->
+      <div class="flex items-center bg-pink-50 p-1 rounded-full border border-pink-200">
+        <button id="btnProfileLeslie" onclick="setProfile('Leslie')" class="px-3 py-1 rounded-full text-xs font-bold transition-all bg-pink-500 text-white shadow-sm">
+          🌸 Soy Leslie (🇩🇪)
+        </button>
+        <button id="btnProfileArturo" onclick="setProfile('Arturo')" class="px-3 py-1 rounded-full text-xs font-bold transition-all text-pink-700 hover:bg-pink-100">
+          🦊 Soy Arturo (🇲🇽)
+        </button>
+      </div>
+
+      <!-- Indicador En Vivo + Cajita Musical -->
+      <div class="flex items-center gap-2">
+        <button id="btnMusic" onclick="toggleMusic()" class="w-8 h-8 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-sm shadow-sm active:scale-95" title="Cajita Musical Candy Candy">
+          🎶
+        </button>
+        <div class="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+          <span id="syncDot" class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+          <span id="syncText" class="text-[11px] font-semibold text-emerald-800">En Vivo</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="max-w-md mx-auto px-3 pt-3 space-y-4">
+
+    <!-- NOTIFICACIÓN EN VIVO DE TERIUS -->
+    <div id="liveBanner" class="hidden bg-gradient-to-r from-amber-50 via-pink-50 to-amber-50 border border-pink-200 rounded-2xl p-3 shadow-sm flex items-center gap-3 animate-bounce">
+      <div class="text-2xl">🐕✨</div>
+      <div class="flex-1 text-xs leading-snug">
+        <p id="liveBannerText" class="font-semibold text-pink-900"></p>
+        <p id="liveBannerTime" class="text-[10px] text-pink-500 mt-0.5"></p>
+      </div>
+      <button onclick="document.getElementById('liveBanner').classList.add('hidden')" class="text-pink-400 hover:text-pink-600 text-sm font-bold px-1">✕</button>
+    </div>
+
+    <!-- ==========================================
+         SECCIÓN 1: NUESTRO CIELO Y JARDÍN DE TERIUS
+         ========================================== -->
+    <section id="tab-sky" class="space-y-4">
+
+      <!-- TARJETA DE CIELOS CONECTADOS (MONTERREY <-> ALEMANIA) -->
+      <div class="rounded-3xl overflow-hidden shadow-lg border border-pink-100 bg-white">
+        <div class="grid grid-cols-2 relative">
+          
+          <!-- Mitad Monterrey -->
+          <div id="skyMty" class="p-3.5 text-white relative overflow-hidden transition-colors duration-1000 min-h-[135px] flex flex-col justify-between bg-gradient-to-b from-indigo-900 via-purple-900 to-slate-900">
+            <div class="flex items-center justify-between z-10">
+              <span class="text-[11px] font-bold tracking-wider uppercase bg-black/25 px-2 py-0.5 rounded-full backdrop-blur-sm">🇲🇽 Monterrey</span>
+              <span id="iconMty" class="text-lg">🌙</span>
+            </div>
+            <div class="z-10 my-1">
+              <div id="timeMty" class="text-2xl font-bold tracking-tight drop-shadow">--:--</div>
+              <div class="text-[11px] opacity-90">Arturo</div>
+            </div>
+            <!-- Silueta Cerro de la Silla -->
+            <svg class="absolute bottom-0 left-0 w-full h-10 opacity-35" viewBox="0 0 200 50" preserveAspectRatio="none">
+              <path d="M0,50 L0,35 L30,28 L65,8 L85,22 L110,5 L145,30 L175,24 L200,38 L200,50 Z" fill="#0f172a"/>
+            </svg>
+          </div>
+
+          <!-- Mitad Alemania -->
+          <div id="skyGer" class="p-3.5 text-white relative overflow-hidden transition-colors duration-1000 min-h-[135px] flex flex-col justify-between bg-gradient-to-b from-sky-400 via-sky-300 to-amber-100 border-l border-white/20">
+            <div class="flex items-center justify-between z-10">
+              <span class="text-[11px] font-bold tracking-wider uppercase bg-black/25 px-2 py-0.5 rounded-full backdrop-blur-sm">🇩🇪 Alemania</span>
+              <span id="iconGer" class="text-lg">☀️</span>
+            </div>
+            <div class="z-10 my-1 text-right">
+              <div id="timeGer" class="text-2xl font-bold tracking-tight drop-shadow">--:--</div>
+              <div class="text-[11px] opacity-90">Leslie</div>
+            </div>
+            <!-- Silueta Tejados Alemanes -->
+            <svg class="absolute bottom-0 left-0 w-full h-10 opacity-35" viewBox="0 0 200 50" preserveAspectRatio="none">
+              <path d="M0,50 L0,32 L20,15 L40,32 L40,25 L65,10 L90,25 L115,30 L135,8 L155,30 L180,18 L200,32 L200,50 Z" fill="#1e293b"/>
+            </svg>
+          </div>
+
+          <!-- Puente Central de Corazón -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="bg-white/95 backdrop-blur-md px-3 py-1 rounded-full shadow-md border border-pink-200 flex items-center gap-1.5">
+              <span class="text-xs font-bold text-pink-600">Bajo el mismo cielo</span>
+              <span class="text-xs">💞</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESCENA DE LA COLINA DE PONY Y TERIUS (PASTOR BELGA) -->
+        <div class="relative bg-gradient-to-b from-sky-100 via-emerald-50 to-emerald-100 p-4 pt-6 text-center overflow-hidden">
+          <!-- Arcoíris sutil de fondo -->
+          <div class="w-64 h-32 mx-auto rounded-t-full border-t-8 border-pink-300/40 absolute -top-4 left-1/2 -translate-x-1/2 pointer-events-none"></div>
+
+          <span class="inline-block text-[11px] font-bold uppercase tracking-widest text-emerald-800 bg-white/80 px-3 py-0.5 rounded-full shadow-sm mb-1">
+            ✨ Guardián de la Colina de Pony ✨
+          </span>
+
+          <!-- SVG DE TERIUS: PASTOR BELGA CON AUREOLA SUAVE Y PAÑUELO -->
+          <div class="relative w-40 h-40 mx-auto my-1 cursor-pointer animate-float" onclick="sendTeriusAction('hug')">
+            <svg viewBox="0 0 160 160" class="w-full h-full guardian-glow">
+              <!-- Destello / Aureola estelar de guardián -->
+              <ellipse cx="80" cy="22" rx="26" ry="6" fill="none" stroke="#facc15" stroke-width="3" opacity="0.85" />
+              <circle cx="42" cy="35" r="2.5" fill="#fde047" />
+              <circle cx="122" cy="40" r="3" fill="#fde047" />
+              <circle cx="35" cy="85" r="2" fill="#fde047" />
+
+              <!-- Cola peluda animada -->
+              <g class="tail-wag">
+                <path d="M45,105 Q20,90 24,72 Q32,82 48,96 Z" fill="#b45309" stroke="#451a03" stroke-width="2"/>
+                <path d="M24,72 Q28,80 35,85" stroke="#1c1917" stroke-width="4" stroke-linecap="round"/>
+              </g>
+
+              <!-- Cuerpo leonado (Fawn/Mahogany de Pastor Belga) -->
+              <path d="M50,92 Q45,125 52,135 L108,135 Q115,125 110,92 Q80,82 50,92 Z" fill="#d97706" stroke="#78350f" stroke-width="2.5"/>
+              <!-- Pecho más oscuro/sombreado -->
+              <path d="M62,95 Q80,112 98,95 Q94,125 80,132 Q66,125 62,95 Z" fill="#b45309" opacity="0.6"/>
+
+              <!-- Patitas delanteras -->
+              <rect x="58" y="122" width="12" height="20" rx="6" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+              <rect x="90" y="122" width="12" height="20" rx="6" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+              <ellipse cx="64" cy="142" rx="7" ry="4" fill="#451a03"/>
+              <ellipse cx="96" cy="142" rx="7" ry="4" fill="#451a03"/>
+
+              <!-- Pañuelo Real de Candy Candy con Pin de Rosa Blanca -->
+              <path d="M52,88 Q80,108 108,88 L96,112 Q80,118 64,112 Z" fill="#e11d48" stroke="#881337" stroke-width="2"/>
+              <circle cx="80" cy="103" r="6" fill="#fff1f2" stroke="#f43f5e" stroke-width="1.5"/>
+              <circle cx="80" cy="103" r="2.5" fill="#fb7185"/>
+
+              <!-- Orejas triangulares erguidas negras características del Pastor Belga -->
+              <polygon points="48,54 38,18 68,42" fill="#292524" stroke="#1c1917" stroke-width="2.5" stroke-linejoin="round"/>
+              <polygon points="49,50 43,25 63,42" fill="#78350f" opacity="0.6"/>
+              <polygon points="112,54 122,18 92,42" fill="#292524" stroke="#1c1917" stroke-width="2.5" stroke-linejoin="round"/>
+              <polygon points="111,50 117,25 97,42" fill="#78350f" opacity="0.6"/>
+
+              <!-- Cabeza leonada -->
+              <path d="M46,52 Q80,34 114,52 Q120,78 98,92 Q80,100 62,92 Q40,78 46,52 Z" fill="#d97706" stroke="#78350f" stroke-width="2.5"/>
+
+              <!-- Máscara Negra Característica del Pastor Belga (Hocico y contorno de ojos) -->
+              <path d="M58,62 Q80,52 102,62 Q106,82 92,91 Q80,97 68,91 Q54,82 58,62 Z" fill="#1c1917"/>
+
+              <!-- Ojos nobles y brillantes -->
+              <circle cx="66" cy="64" r="5.5" fill="#451a03"/>
+              <circle cx="66" cy="64" r="4.5" fill="#1c1917"/>
+              <circle cx="64.5" cy="62.5" r="1.8" fill="#ffffff"/>
+
+              <circle cx="94" cy="64" r="5.5" fill="#451a03"/>
+              <circle cx="94" cy="64" r="4.5" fill="#1c1917"/>
+              <circle cx="92.5" cy="62.5" r="1.8" fill="#ffffff"/>
+
+              <!-- Cejas expresivas -->
+              <ellipse cx="66" cy="56" rx="4" ry="1.8" fill="#d97706"/>
+              <ellipse cx="94" cy="56" rx="4" ry="1.8" fill="#d97706"/>
+
+              <!-- Nariz y sonrisa feliz con lengüita -->
+              <ellipse cx="80" cy="76" rx="7" ry="5" fill="#09090b"/>
+              <ellipse cx="78" cy="74.5" rx="2.5" ry="1.2" fill="#52525b"/>
+              <path d="M71,83 Q80,90 89,83" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+              <!-- Lengua rosada feliz -->
+              <path d="M76,86 Q80,96 84,86 Z" fill="#fb7185" stroke="#e11d48" stroke-width="1"/>
+            </svg>
+          </div>
+
+          <!-- Burbuja de diálogo de Terius -->
+          <div class="bg-white/95 border border-pink-200 rounded-2xl p-3 shadow-sm max-w-xs mx-auto mb-3">
+            <p id="teriusSpeech" class="text-xs font-medium text-gray-700 italic">
+              "¡Guau! Estoy cuidando nuestras rosas blancas en la Colina de Pony. ¡Tócame para mandar un cariño hasta el otro lado del mundo!"
+            </p>
+          </div>
+
+          <!-- Botones de Interacción en Tiempo Real con Terius -->
+          <div class="grid grid-cols-3 gap-2 max-w-sm mx-auto">
+            <button onclick="sendTeriusAction('kiss')" class="bg-white hover:bg-pink-50 active:scale-95 border border-pink-200 rounded-xl py-2 px-2 shadow-sm flex flex-col items-center gap-0.5 transition">
+              <span class="text-lg">🐕💌</span>
+              <span class="text-[11px] font-bold text-pink-700">Mandar Besito</span>
+            </button>
+            <button onclick="sendTeriusAction('ball')" class="bg-white hover:bg-amber-50 active:scale-95 border border-amber-200 rounded-xl py-2 px-2 shadow-sm flex flex-col items-center gap-0.5 transition">
+              <span class="text-lg">🎾✨</span>
+              <span class="text-[11px] font-bold text-amber-700">Lanzar Pelota</span>
+            </button>
+            <button onclick="sendTeriusAction('treat')" class="bg-white hover:bg-emerald-50 active:scale-95 border border-emerald-200 rounded-xl py-2 px-2 shadow-sm flex flex-col items-center gap-0.5 transition">
+              <span class="text-lg">🦴💛</span>
+              <span class="text-[11px] font-bold text-emerald-700">Dar Premio</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EL JARDÍN DE ROSAS BLANCAS "DULCE CANDY" -->
+      <div class="bg-white rounded-3xl p-4 shadow-md border border-pink-100 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="font-serif-title font-bold text-base text-gray-800 flex items-center gap-1.5">
+              <span>🌹</span> Jardín de Rosas "Dulce Candy"
+            </h2>
+            <p class="text-xs text-gray-500">Planta una rosa blanca con una nota para que aparezca en el celular del otro.</p>
+          </div>
+          <button onclick="openRoseModal()" class="bg-pink-500 hover:bg-pink-600 active:scale-95 text-white text-xs font-bold px-3.5 py-2 rounded-full shadow-sm transition shrink-0">
+            + Plantar Rosa
+          </button>
+        </div>
+
+        <!-- Prado de Rosas Plantadas -->
+        <div id="rosesGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-2.5 pt-2 min-h-[110px] bg-gradient-to-b from-emerald-50/70 to-emerald-100/70 rounded-2xl p-3 border border-emerald-200/60">
+          <!-- Se llena dinámicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECCIÓN 2: CÁMARA POLAROID AL INSTANTE
+         ========================================== -->
+    <section id="tab-polaroid" class="hidden space-y-4">
+
+      <!-- CABECERA DE LA CÁMARA DESECHABLE (SIN BLOQUEO DOMINICAL) -->
+      <div class="bg-gradient-to-r from-amber-100 via-rose-100 to-teal-100 rounded-3xl p-4 shadow-md border border-amber-200">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">📸</span>
+            <div>
+              <h2 class="font-serif-title font-bold text-base text-gray-800">Nuestra Cámara Polaroid</h2>
+              <p class="text-[11px] text-gray-600">¡Las fotos llegan al instante sin esperar al domingo!</p>
+            </div>
+          </div>
+          <!-- Contador de Rollo Compartido -->
+          <div class="bg-gray-900 text-amber-400 font-mono text-xs px-3 py-1.5 rounded-xl border-2 border-gray-700 shadow-inner text-center">
+            <div class="text-[9px] uppercase text-gray-400 leading-none">Rollo Actual</div>
+            <span id="rollCounterText" class="font-bold text-sm">0 / 18</span>
+          </div>
+        </div>
+
+        <!-- Contadores individuales informativos + Botón Reiniciar Contador -->
+        <div class="flex items-center justify-between bg-white/80 backdrop-blur-sm rounded-xl px-3 py-2 text-xs mb-3 border border-white">
+          <span id="shotsLeslie" class="font-semibold text-pink-700">🌸 Leslie: 0/9</span>
+          <span class="text-gray-300">|</span>
+          <span id="shotsArturo" class="font-semibold text-indigo-700">🦊 Arturo: 0/9</span>
+          <button onclick="resetRollCounter()" class="text-[11px] text-teal-700 underline font-semibold hover:text-teal-900 ml-2">
+            🔄 Nuevo Rollo
+          </button>
+        </div>
+
+        <!-- Botón para Tomar / Subir Foto -->
+        <button onclick="openPhotoModal()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 active:scale-98 text-white font-bold py-3 rounded-2xl shadow-md flex items-center justify-center gap-2 text-sm transition">
+          <span>🎞️</span> Tomar o Subir Foto Polaroid Ahora
+        </button>
+      </div>
+
+      <!-- TABLERO DE CORCHO DE FOTOS POLAROID -->
+      <div class="corkboard rounded-3xl p-4 shadow-inner border-4 border-amber-900/30 min-h-[380px]">
+        <div class="flex items-center justify-between mb-3 bg-white/85 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm">
+          <span class="text-xs font-bold text-amber-950">📌 Nuestro Muro de Recuerdos (🇲🇽 ↔ 🇩🇪)</span>
+          <span class="text-[11px] text-amber-800">Toca una foto fresca para revelarla</span>
+        </div>
+
+        <div id="polaroidBoard" class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+          <!-- Polaroids se renderizan aquí al instante -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         SECCIÓN 3: EL SOMBRERERO AZUL DE LARA JEAN
+         ========================================== -->
+    <section id="tab-letters" class="hidden space-y-4">
+      <div class="hatbox-bg rounded-3xl p-5 text-white shadow-lg border-2 border-teal-200/40 relative overflow-hidden">
+        <!-- Cinta decorativa estilo Lara Jean -->
+        <div class="flex items-center justify-between relative z-10">
+          <div>
+            <span class="text-[10px] uppercase tracking-widest bg-white/20 px-2.5 py-0.5 rounded-full font-bold">
+              A todos los chicos de los que me enamoré
+            </span>
+            <h2 class="font-serif-title font-bold text-xl mt-1">El Sombrerero Turquesa</h2>
+            <p class="text-xs text-teal-50 mt-0.5">Cartas lacradas para abrir cuando me extrañes</p>
+          </div>
+          <div class="text-4xl">👒💌</div>
+        </div>
+
+        <button onclick="openNewLetterModal()" class="mt-4 w-full bg-white text-teal-800 hover:bg-teal-50 active:scale-98 font-bold py-2.5 rounded-xl shadow-sm text-xs flex items-center justify-center gap-1.5 transition">
+          <span>✒️</span> Escribir Nueva Carta con Sello de Lacre
+        </button>
+      </div>
+
+      <!-- Lista de Cartas (Incluye la Carta de Terius + Cartas de ustedes) -->
+      <div id="lettersContainer" class="space-y-3">
+        <!-- Se llena dinámicamente -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==========================================
+       MODALES INTERACTIVOS
+       ========================================== -->
+
+  <!-- MODAL 1: PLANTAR ROSA BLANCA -->
+  <div id="modalRose" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-pink-100 space-y-3">
+      <div class="flex justify-between items-center">
+        <h3 class="font-serif-title font-bold text-lg text-gray-800">🌹 Plantar Rosa "Dulce Candy"</h3>
+        <button onclick="closeRoseModal()" class="text-gray-400 hover:text-gray-600 font-bold">✕</button>
+      </div>
+      <p class="text-xs text-gray-500">Esta rosa crecerá al instante en la Colina de Pony junto a Terius.</p>
+      <textarea id="inputRoseNote" rows="3" placeholder="Escribe un mensajito tierno para esta rosa..." class="w-full rounded-2xl border border-pink-200 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400"></textarea>
+      <button onclick="submitRose()" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2.5 rounded-xl text-sm shadow-md">
+        🌱 Plantar en Nuestro Jardín
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 2: VER MENSAJE DE UNA ROSA -->
+  <div id="modalViewRose" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-pink-200 text-center space-y-3">
+      <div class="text-5xl animate-bounce">🌹✨</div>
+      <h3 id="viewRoseAuthor" class="font-serif-title font-bold text-base text-pink-700"></h3>
+      <p id="viewRoseText" class="font-handwriting text-2xl text-gray-800 py-2 px-3 bg-pink-50/70 rounded-2xl border border-pink-100"></p>
+      <p id="viewRoseDate" class="text-[11px] text-gray-400"></p>
+      <button onclick="document.getElementById('modalViewRose').classList.add('hidden')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 rounded-xl text-xs">
+        Cerrar
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 3: SUBIR FOTO POLAROID AL INSTANTE -->
+  <div id="modalPhoto" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-amber-200 space-y-3 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center">
+        <h3 class="font-serif-title font-bold text-lg text-gray-800">📸 Nueva Polaroid</h3>
+        <button onclick="closePhotoModal()" class="text-gray-400 hover:text-gray-600 font-bold">✕</button>
+      </div>
+
+      <!-- Selector de archivo (Cámara o Galería) -->
+      <label class="block w-full cursor-pointer border-2 border-dashed border-pink-300 hover:border-pink-500 rounded-2xl p-4 text-center bg-pink-50/40 transition">
+        <span class="text-2xl block mb-1">📷</span>
+        <span class="text-xs font-bold text-pink-700">Toca aquí para elegir foto o usar tu cámara</span>
+        <input type="file" id="inputPhotoFile" accept="image/*" class="hidden" onchange="previewSelectedPhoto(event)" />
+      </label>
+
+      <!-- Vista previa -->
+      <div id="photoPreviewBox" class="hidden polaroid-card mx-auto max-w-[210px]">
+        <img id="photoPreviewImg" src="" alt="Preview" class="w-full h-44 object-cover rounded-sm" />
+      </div>
+
+      <div>
+        <label class="text-xs font-bold text-gray-600 block mb-1">Nota escrita a mano al pie de la foto:</label>
+        <input type="text" id="inputPhotoCaption" maxlength="70" placeholder="Ej: Pensando en ti desde aquí 💕" class="w-full rounded-xl border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400" />
+      </div>
+
+      <!-- Opción de efecto sorpresa al tocar (sin esperar al domingo) -->
+      <label class="flex items-center gap-2 bg-amber-50 p-2.5 rounded-xl border border-amber-200 cursor-pointer">
+        <input type="checkbox" id="inputDarkroomEffect" checked class="rounded text-pink-500 focus:ring-pink-400" />
+        <span class="text-xs text-amber-900 leading-tight">
+          <strong>Efecto Polaroid Fresca:</strong> Llega al instante pero velada para que se revele mágicamente en 2 segundos cuando la toque con el dedo.
+        </span>
+      </label>
+
+      <button id="btnSubmitPhoto" onclick="submitPolaroid()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-3 rounded-xl text-sm shadow-md">
+        ✨ Colgar Polaroid en Nuestro Muro
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ESCRIBIR NUEVA CARTA EN EL SOMBRERERO -->
+  <div id="modalLetter" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-teal-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <h3 class="font-serif-title font-bold text-lg text-teal-900">💌 Guardar Carta en el Sombrerero</h3>
+        <button onclick="closeNewLetterModal()" class="text-gray-400 hover:text-gray-600 font-bold">✕</button>
+      </div>
+      <div>
+        <label class="text-xs font-bold text-gray-600 block mb-1">Título del sobre ("Ábrelo cuando..."):</label>
+        <input type="text" id="inputLetterTitle" placeholder="Ej: Ábrelo cuando me extrañes mucho" class="w-full rounded-xl border border-teal-200 p-2.5 text-sm" />
+      </div>
+      <div>
+        <label class="text-xs font-bold text-gray-600 block mb-1">Tu carta:</label>
+        <textarea id="inputLetterBody" rows="4" placeholder="Escribe todo lo que sientes..." class="w-full rounded-xl border border-teal-200 p-2.5 text-sm"></textarea>
+      </div>
+      <button onclick="submitLetter()" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 rounded-xl text-sm shadow-md">
+        🕯️ Sellar con Lacre y Guardar
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL 5: LEER CARTA ABIERTA -->
+  <div id="modalReadLetter" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#fffdf9] rounded-3xl max-w-md w-full p-6 shadow-2xl border-2 border-amber-200 space-y-4 max-h-[85vh] overflow-y-auto relative">
+      <div class="flex justify-between items-start border-b border-amber-200 pb-3">
+        <div>
+          <span id="readLetterBadge" class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700">Sello Real</span>
+          <h3 id="readLetterTitle" class="font-serif-title font-bold text-lg text-gray-800 mt-1"></h3>
+        </div>
+        <button onclick="document.getElementById('modalReadLetter').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
+      </div>
+      <div id="readLetterBody" class="font-handwriting text-2xl text-gray-800 leading-relaxed whitespace-pre-line py-2"></div>
+      <div id="readLetterFooter" class="text-right text-xs font-bold text-teal-800 border-t border-amber-100 pt-2"></div>
+    </div>
+  </div>
+
+  <!-- BARRA DE NAVEGACIÓN INFERIOR (ESTILO APP MÓVIL) -->
+  <nav class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-pink-100 shadow-lg">
+    <div class="max-w-md mx-auto grid grid-cols-3 py-2 px-4 gap-2">
+      <button id="nav-sky" onclick="switchTab('sky')" class="flex flex-col items-center py-1 rounded-2xl text-pink-600 bg-pink-50 font-bold transition">
+        <span class="text-xl">🐕🌹</span>
+        <span class="text-[11px] mt-0.5">Terius y Cielo</span>
+      </button>
+      <button id="nav-polaroid" onclick="switchTab('polaroid')" class="flex flex-col items-center py-1 rounded-2xl text-gray-500 hover:text-pink-600 font-medium transition relative">
+        <span class="text-xl">📸🎞️</span>
+        <span class="text-[11px] mt-0.5">Polaroids</span>
+      </button>
+      <button id="nav-letters" onclick="switchTab('letters')" class="flex flex-col items-center py-1 rounded-2xl text-gray-500 hover:text-pink-600 font-medium transition">
+        <span class="text-xl">👒💌</span>
+        <span class="text-[11px] mt-0.5">Sombrerero</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- LÓGICA DE LA APLICACIÓN + SINCRONIZACIÓN EN TIEMPO REAL -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Estado Local y por Defecto
+    let currentUser = localStorage.getItem('leslie_arturo_profile') || 'Leslie';
+    let compressedPhotoDataUrl = null;
+    let db = null;
+    let sharedDocRef = null;
+
+    // Datos iniciales tiernos para que nunca se vea vacío
+    let appState = {
+      lastAction: {
+        by: 'Arturo',
+        type: 'kiss',
+        message: '🦊 Arturo le dio un abrazo a Terius y te mandó un besito desde Monterrey hasta Alemania 💞',
+        timestamp: Date.now()
+      },
+      rollResetTimestamp: 0,
+      roses: [
+        {
+          id: 'r1',
+          author: 'Arturo',
+          note: 'Una primera Rosa Blanca "Dulce Candy" para recordarte que eres mucho más linda cuando sonríes que cuando lloras. ¡Te amo, mi amor!',
+          createdAt: 'En la Colina de Pony'
+        },
+        {
+          id: 'r2',
+          author: 'Terius 🐾',
+          note: '¡Guau! Aquí en la Colina de Pony el sol calienta súper rico y tengo muchas pelotas para correr feliz. ¡Siempre te cuido!',
+          createdAt: 'Siempre contigo'
+        }
+      ],
+      polaroids: [],
+      letters: [
+        {
+          id: 'l_terius',
+          author: 'Terius 🐕✨',
+          badge: 'Huellita desde la Colina de Pony',
+          title: 'Para mi humana favorita: Una huellita llena de sol',
+          body: '¡Guau, guau! Hola mi Leslie hermosa.\n\nQuería mandarte esta carta con el Príncipe de la Colina para contarte que aquí en mi prado de rosas blancas corro súper rápido, mis orejitas de Pastor Belga siguen igual de atentas y nunca me faltan premios ni pelotas.\n\nNo quiero que estés triste cuando me recuerdes; cada vez que mires al cielo o sonrías allá en Alemania, yo muevo la colita de felicidad. Arturo me pidió que te cuidara el corazón desde aquí. ¡Te quiero por siempre!',
+          date: 'Colina de Pony'
+        },
+        {
+          id: 'l_arturo1',
+          author: 'Arturo 🦊',
+          badge: 'Sello de Lacre Real',
+          title: 'Ábrelo cuando sientas lejos la distancia entre México y Alemania',
+          body: 'Mi amor hermosa,\n\nAunque ahorita haya horas de diferencia y un océano entre Monterrey y Alemania, quiero que sepas que estás en cada uno de mis pensamientos.\n\nHice este rincón para que tengamos nuestro propio cielo compartido, nuestro álbum de fotos al instante y a Terius cuidando nuestras rosas. Siempre quiero estar contigo, hoy y en todos los planes que nos esperan juntos. ¡Te amo muchísimo!',
+          date: 'Con todo mi amor, Arturo'
+        }
+      ]
+    };
+
+    // Cargar respaldo local por si abre sin internet
+    const savedLocal = localStorage.getItem('leslie_arturo_shared_v2');
+    if (savedLocal) {
+      try {
+        appState = { ...appState, ...JSON.parse(savedLocal) };
+      } catch (e) {}
+    }
+
+    // Inicializar Firebase si está disponible en el entorno compartido
+    const myFirebaseConfig = {
+      apiKey: "AIzaSyCrVVFYrZjDdpJ92ogSTqLMZ4gvzRfTFCM",
+      authDomain: "amor-4ffa5.firebaseapp.com",
+      projectId: "amor-4ffa5",
+      storageBucket: "amor-4ffa5.firebasestorage.app",
+      messagingSenderId: "259203745864",
+      appId: "1:259203745864:web:ea83d13e7bcf412c56f07d",
+      measurementId: "G-S5YC08S136"
+    };
+    async function initCloudSync() {
+      try {
+        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+          const firebaseConfig = JSON.parse(__firebase_config);
+          const app = initializeApp(firebaseConfig);
+          const auth = getAuth(app);
+          db = getFirestore(app);
+          const appId = typeof __app_id !== 'undefined' ? __app_id : 'leslie-arturo-sky';
+
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+            await signInAnonymously(auth);
+          }
+
+          onAuthStateChanged(auth, (user) => {
+            if (user) {
+              sharedDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'skyRoom', 'LESLIE_ARTURO_STATE');
+              onSnapshot(sharedDocRef, (snapshot) => {
+                if (snapshot.exists()) {
+                  const cloudData = snapshot.data();
+                  if (cloudData.payload) {
+                    appState = JSON.parse(cloudData.payload);
+                    localStorage.setItem('leslie_arturo_shared_v2', JSON.stringify(appState));
+                    renderAll();
+                  }
+                } else {
+                  saveState();
+                }
+              }, (err) => {
+                console.warn("Modo local activo:", err);
+              });
+            }
+          });
+        }
+      } catch (e) {
+        console.warn("Usando almacenamiento local:", e);
+      }
+    }
+
+    async function saveState() {
+      localStorage.setItem('leslie_arturo_shared_v2', JSON.stringify(appState));
+      renderAll();
+      if (sharedDocRef) {
+        try {
+          await setDoc(sharedDocRef, {
+            payload: JSON.stringify(appState),
+            updatedAt: Date.now()
+          });
+        } catch (e) {
+          console.warn("Error guardando en nube:", e);
+        }
+      }
+    }
+
+    // ==========================================
+    // RELOJES REALES (MONTERREY Y ALEMANIA)
+    // ==========================================
+    function updateClocks() {
+      const now = new Date();
+      const mtyStr = now.toLocaleTimeString('es-MX', {
+        timeZone: 'America/Monterrey',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      const gerStr = now.toLocaleTimeString('es-MX', {
+        timeZone: 'Europe/Berlin',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+
+      const mtyHour = parseInt(now.toLocaleTimeString('en-US', { timeZone: 'America/Monterrey', hour: '2-digit', hour12: false }), 10);
+      const gerHour = parseInt(now.toLocaleTimeString('en-US', { timeZone: 'Europe/Berlin', hour: '2-digit', hour12: false }), 10);
+
+      document.getElementById('timeMty').textContent = mtyStr;
+      document.getElementById('timeGer').textContent = gerStr;
+
+      applySkyTheme('skyMty', 'iconMty', mtyHour);
+      applySkyTheme('skyGer', 'iconGer', gerHour);
+    }
+
+    function applySkyTheme(elId, iconId, hour) {
+      const el = document.getElementById(elId);
+      const icon = document.getElementById(iconId);
+      if (hour >= 6 && hour < 9) {
+        el.className = "p-3.5 text-white relative overflow-hidden transition-colors duration-1000 min-h-[135px] flex flex-col justify-between bg-gradient-to-b from-rose-400 via-amber-300 to-sky-200";
+        icon.textContent = "🌅";
+      } else if (hour >= 9 && hour < 18) {
+        el.className = "p-3.5 text-white relative overflow-hidden transition-colors duration-1000 min-h-[135px] flex flex-col justify-between bg-gradient-to-b from-sky-500 via-sky-400 to-emerald-200";
+        icon.textContent = "☀️";
+      } else if (hour >= 18 && hour < 20) {
+        el.className = "p-3.5 text-white relative overflow-hidden transition-colors duration-1000 min-h-[135px] flex flex-col justify-between bg-gradient-to-b from-indigo-700 via-pink-500 to-amber-400";
+        icon.textContent = "🌇";
+      } else {
+        el.className = "p-3.5 text-white relative overflow-hidden transition-colors duration-1000 min-h-[135px] flex flex-col justify-between bg-gradient-to-b from-slate-950 via-indigo-950 to-purple-900";
+        icon.textContent = "🌙✨";
+      }
+    }
+
+    // ==========================================
+    // SONIDOS SINTETIZADOS (LADRIDO FELIZ Y CAJITA MUSICAL)
+    // ==========================================
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      return audioCtx;
+    }
+
+    function playHappyBark() {
+      try {
+        const ctx = getAudioCtx();
+        [0, 0.16].forEach((offset) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(320, ctx.currentTime + offset);
+          osc.frequency.exponentialRampToValueAtTime(520, ctx.currentTime + offset + 0.08);
+          osc.frequency.exponentialRampToValueAtTime(240, ctx.currentTime + offset + 0.13);
+          gain.gain.setValueAtTime(0.18, ctx.currentTime + offset);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + offset + 0.14);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + offset);
+          osc.stop(ctx.currentTime + offset + 0.14);
+        });
+      } catch (e) {}
+    }
+
+    let musicInterval = null;
+    let isPlayingMusic = false;
+    const melodyNotes = [523.25, 659.25, 783.99, 659.25, 880.00, 783.99, 659.25, 587.33, 523.25, 587.33, 659.25, 523.25];
+    let noteIdx = 0;
+
+    window.toggleMusic = function() {
+      const btn = document.getElementById('btnMusic');
+      if (isPlayingMusic) {
+        clearInterval(musicInterval);
+        isPlayingMusic = false;
+        btn.classList.remove('bg-pink-200');
+      } else {
+        isPlayingMusic = true;
+        btn.classList.add('bg-pink-200');
+        musicInterval = setInterval(() => {
+          try {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(melodyNotes[noteIdx % melodyNotes.length], ctx.currentTime);
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.45);
+            noteIdx++;
+          } catch (e) {}
+        }, 500);
+      }
+    };
+
+    // ==========================================
+    // INTERACCIONES CON TERIUS Y ROSAS
+    // ==========================================
+    window.setProfile = function(name) {
+      currentUser = name;
+      localStorage.setItem('leslie_arturo_profile', name);
+      renderProfileButtons();
+    };
+
+    function renderProfileButtons() {
+      const btnL = document.getElementById('btnProfileLeslie');
+      const btnA = document.getElementById('btnProfileArturo');
+      if (currentUser === 'Leslie') {
+        btnL.className = "px-3 py-1 rounded-full text-xs font-bold transition-all bg-pink-500 text-white shadow-sm";
+        btnA.className = "px-3 py-1 rounded-full text-xs font-bold transition-all text-pink-700 hover:bg-pink-100";
+      } else {
+        btnA.className = "px-3 py-1 rounded-full text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm";
+        btnL.className = "px-3 py-1 rounded-full text-xs font-bold transition-all text-pink-700 hover:bg-pink-100";
+      }
+    }
+
+    window.sendTeriusAction = function(type) {
+      playHappyBark();
+      const other = currentUser === 'Leslie' ? 'Arturo' : 'Leslie';
+      let msg = '';
+      let speech = '';
+
+      if (type === 'kiss') {
+        msg = `${currentUser === 'Leslie' ? '🌸 Leslie' : '🦊 Arturo'} te mandó un besito con Terius de continente a continente 💞`;
+        speech = `¡Guau! Llevando el besito de ${currentUser} a toda velocidad hasta ${other} 🐾💨`;
+      } else if (type === 'ball') {
+        msg = `${currentUser === 'Leslie' ? '🌸 Leslie' : '🦊 Arturo'} lanzó la pelota dorada con Terius para hacerte sonreír 🎾✨`;
+        speech = `¡Atrapé la pelota en el aire! "¡Eres mucho más linda cuando sonríes!" 🐕🎾`;
+      } else {
+        msg = `${currentUser === 'Leslie' ? '🌸 Leslie' : '🦊 Arturo'} le dio un premio a Terius y te mandó un abrazo gigante 🦴💛`;
+        speech = `¡Ñam ñam! Qué rico premio. ¡Los cuido a los dos desde la Colina de Pony! 🐾✨`;
+      }
+
+      document.getElementById('teriusSpeech').textContent = `"${speech}"`;
+      appState.lastAction = {
+        by: currentUser,
+        type,
+        message: msg,
+        timestamp: Date.now()
+      };
+      saveState();
+    };
+
+    window.openRoseModal = function() {
+      document.getElementById('inputRoseNote').value = '';
+      document.getElementById('modalRose').classList.remove('hidden');
+    };
+    window.closeRoseModal = function() {
+      document.getElementById('modalRose').classList.add('hidden');
+    };
+
+    window.submitRose = function() {
+      const note = document.getElementById('inputRoseNote').value.trim();
+      if (!note) return;
+      const nowStr = new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+      appState.roses.unshift({
+        id: 'rose_' + Date.now(),
+        author: currentUser,
+        note,
+        createdAt: nowStr
+      });
+      appState.lastAction = {
+        by: currentUser,
+        type: 'rose',
+        message: `${currentUser === 'Leslie' ? '🌸 Leslie' : '🦊 Arturo'} acaba de plantar una nueva Rosa Blanca "Dulce Candy" con una nota para ti 🌹`,
+        timestamp: Date.now()
+      };
+      closeRoseModal();
+      playHappyBark();
+      saveState();
+    };
+
+    window.viewRose = function(idx) {
+      const r = appState.roses[idx];
+      if (!r) return;
+      document.getElementById('viewRoseAuthor').textContent = `Rosa plantada por ${r.author}`;
+      document.getElementById('viewRoseText').textContent = `"${r.note}"`;
+      document.getElementById('viewRoseDate').textContent = r.createdAt || '';
+      document.getElementById('modalViewRose').classList.remove('hidden');
+    };
+
+    // ==========================================
+    // CÁMARA POLAROID AL INSTANTE (COMPRESIÓN + REVELADO AL TOQUE)
+    // ==========================================
+    window.openPhotoModal = function() {
+      compressedPhotoDataUrl = null;
+      document.getElementById('inputPhotoFile').value = '';
+      document.getElementById('inputPhotoCaption').value = '';
+      document.getElementById('photoPreviewBox').classList.add('hidden');
+      document.getElementById('modalPhoto').classList.remove('hidden');
+    };
+
+    window.closePhotoModal = function() {
+      document.getElementById('modalPhoto').classList.add('hidden');
+    };
+
+    window.previewSelectedPhoto = function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxDim = 520; // Ligero para sincronizar al instante en Firebase
+          let w = img.width;
+          let h = img.height;
+          if (w > h && w > maxDim) {
+            h = Math.round((h * maxDim) / w);
+            w = maxDim;
+          } else if (h >= w && h > maxDim) {
+            w = Math.round((w * maxDim) / h);
+            h = maxDim;
+          }
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          compressedPhotoDataUrl = canvas.toDataURL('image/jpeg', 0.68);
+          document.getElementById('photoPreviewImg').src = compressedPhotoDataUrl;
+          document.getElementById('photoPreviewBox').classList.remove('hidden');
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    };
+
+    window.submitPolaroid = function() {
+      if (!compressedPhotoDataUrl) {
+        alert('Primero selecciona o toma una foto 📸');
+        return;
+      }
+      const caption = document.getElementById('inputPhotoCaption').value.trim() || 'Un pedacito de mi día para ti 💕';
+      const darkroom = document.getElementById('inputDarkroomEffect').checked;
+      const nowStr = new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+      appState.polaroids.unshift({
+        id: 'pol_' + Date.now(),
+        author: currentUser,
+        imageUrl: compressedPhotoDataUrl,
+        caption,
+        revealed: !darkroom,
+        createdAt: nowStr,
+        timestamp: Date.now()
+      });
+
+      // Mantener máximo 20 fotos en el estado activo para que la nube siempre sea ultra rápida
+      if (appState.polaroids.length > 20) {
+        appState.polaroids = appState.polaroids.slice(0, 20);
+      }
+
+      appState.lastAction = {
+        by: currentUser,
+        type: 'photo',
+        message: `📸 ¡${currentUser} acaba de colgar una nueva foto Polaroid! Entra a la pestaña Polaroids para verla al instante.`,
+        timestamp: Date.now()
+      };
+
+      closePhotoModal();
+      saveState();
+    };
+
+    window.revealPolaroidNow = function(id) {
+      const item = appState.polaroids.find(p => p.id === id);
+      if (item && !item.revealed) {
+        item.revealed = true;
+        playHappyBark();
+        saveState();
+      }
+    };
+
+    window.deletePolaroid = function(id) {
+      appState.polaroids = appState.polaroids.filter(p => p.id !== id);
+      saveState();
+    };
+
+    window.resetRollCounter = function() {
+      appState.rollResetTimestamp = Date.now();
+      saveState();
+    };
+
+    // ==========================================
+    // SOMBRERERO DE CARTAS DE LARA JEAN
+    // ==========================================
+    window.openNewLetterModal = function() {
+      document.getElementById('inputLetterTitle').value = '';
+      document.getElementById('inputLetterBody').value = '';
+      document.getElementById('modalLetter').classList.remove('hidden');
+    };
+    window.closeNewLetterModal = function() {
+      document.getElementById('modalLetter').classList.add('hidden');
+    };
+
+    window.submitLetter = function() {
+      const title = document.getElementById('inputLetterTitle').value.trim();
+      const body = document.getElementById('inputLetterBody').value.trim();
+      if (!title || !body) return;
+
+      const nowStr = new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
+      appState.letters.unshift({
+        id: 'let_' + Date.now(),
+        author: currentUser === 'Leslie' ? 'Leslie 🌸' : 'Arturo 🦊',
+        badge: 'Carta con Sello de Lacre',
+        title,
+        body,
+        date: `Escrita el ${nowStr}`
+      });
+
+      appState.lastAction = {
+        by: currentUser,
+        type: 'letter',
+        message: `💌 ¡${currentUser} guardó una carta nueva en el Sombrerero Turquesa!`,
+        timestamp: Date.now()
+      };
+
+      closeNewLetterModal();
+      saveState();
+    };
+
+    window.readLetter = function(idx) {
+      const l = appState.letters[idx];
+      if (!l) return;
+      document.getElementById('readLetterBadge').textContent = l.badge || 'Sello de Amor';
+      document.getElementById('readLetterTitle').textContent = l.title;
+      document.getElementById('readLetterBody').textContent = l.body;
+      document.getElementById('readLetterFooter').textContent = `${l.author} • ${l.date}`;
+      document.getElementById('modalReadLetter').classList.remove('hidden');
+    };
+
+    // ==========================================
+    // NAVEGACIÓN Y RENDERIZADO GENERAL
+    // ==========================================
+    window.switchTab = function(tabName) {
+      ['sky', 'polaroid', 'letters'].forEach(t => {
+        document.getElementById('tab-' + t).classList.add('hidden');
+        const navBtn = document.getElementById('nav-' + t);
+        navBtn.className = "flex flex-col items-center py-1 rounded-2xl text-gray-500 hover:text-pink-600 font-medium transition";
+      });
+      document.getElementById('tab-' + tabName).classList.remove('hidden');
+      document.getElementById('nav-' + tabName).className = "flex flex-col items-center py-1 rounded-2xl text-pink-600 bg-pink-50 font-bold transition";
+    };
+
+    function renderAll() {
+      renderProfileButtons();
+
+      // 1. Banner de última interacción
+      if (appState.lastAction && appState.lastAction.message) {
+        const banner = document.getElementById('liveBanner');
+        banner.classList.remove('hidden');
+        document.getElementById('liveBannerText').textContent = appState.lastAction.message;
+        const minsAgo = Math.max(0, Math.floor((Date.now() - (appState.lastAction.timestamp || Date.now())) / 60000));
+        document.getElementById('liveBannerTime').textContent = minsAgo === 0 ? 'Hace unos instantes ✨' : `Hace ${minsAgo} min`;
+      }
+
+      // 2. Renderizar Rosas Blancas
+      const rosesGrid = document.getElementById('rosesGrid');
+      rosesGrid.innerHTML = appState.roses.map((r, idx) => `
+        <button onclick="viewRose(${idx})" class="bg-white/90 hover:bg-white p-2.5 rounded-2xl shadow-sm border border-pink-100 flex flex-col items-center text-center transition transform hover:-translate-y-0.5 active:scale-95">
+          <span class="text-2xl mb-1">🌹</span>
+          <span class="text-[11px] font-bold text-gray-800 truncate w-full">${r.author}</span>
+          <span class="text-[10px] text-pink-600 truncate w-full">"${r.note}"</span>
+        </button>
+      `).join('');
+
+      // 3. Renderizar Polaroids y Contador de Rollo
+      const resetTime = appState.rollResetTimestamp || 0;
+      const currentRollPhotos = appState.polaroids.filter(p => (p.timestamp || 0) >= resetTime);
+      const countLeslie = currentRollPhotos.filter(p => p.author === 'Leslie').length;
+      const countArturo = currentRollPhotos.filter(p => p.author === 'Arturo').length;
+      const totalRoll = countLeslie + countArturo;
+
+      document.getElementById('rollCounterText').textContent = `${totalRoll} / 18`;
+      document.getElementById('shotsLeslie').textContent = `🌸 Leslie: ${countLeslie}/9`;
+      document.getElementById('shotsArturo').textContent = `🦊 Arturo: ${countArturo}/9`;
+
+      const board = document.getElementById('polaroidBoard');
+      if (appState.polaroids.length === 0) {
+        board.innerHTML = `
+          <div class="col-span-full bg-white/85 rounded-2xl p-6 text-center shadow-sm">
+            <div class="text-4xl mb-2">📸✨</div>
+            <p class="font-bold text-sm text-gray-800">¡Su corcho de Polaroids está listo!</p>
+            <p class="text-xs text-gray-600 mt-1">Toma la primera foto arriba; aparecerá aquí al instante sin tener que esperar al fin de semana.</p>
+          </div>
+        `;
+      } else {
+        board.innerHTML = appState.polaroids.map((p, i) => {
+          const rot = (i % 2 === 0) ? '-rotate-1' : 'rotate-1';
+          const isRevealed = p.revealed !== false;
+          return `
+            <div class="polaroid-card rounded-sm ${rot} relative">
+              <!-- Chincheta arriba -->
+              <div class="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-md mx-auto -mt-1 mb-2 border border-rose-700"></div>
+
+              <div class="relative overflow-hidden bg-gray-900 rounded-sm cursor-pointer" onclick="revealPolaroidNow('${p.id}')">
+                <img src="${p.imageUrl}" alt="Polaroid" class="w-full h-52 object-cover ${isRevealed ? 'polaroid-revealed' : 'polaroid-unrevealed'}" />
+                ${!isRevealed ? `
+                  <div class="absolute inset-0 flex flex-col items-center justify-center bg-black/30 text-white p-3 text-center">
+                    <span class="text-3xl animate-pulse mb-1">🎞️✨</span>
+                    <span class="text-xs font-bold bg-pink-600/90 px-3 py-1 rounded-full shadow">¡Toca para revelar foto al instante!</span>
+                  </div>
+                ` : ''}
+              </div>
+
+              <div class="mt-3 text-center px-1">
+                <p class="font-handwriting text-xl text-gray-800 leading-tight">${p.caption}</p>
+                <div class="flex items-center justify-between text-[10px] text-gray-400 mt-2 pt-1 border-t border-gray-100">
+                  <span class="font-bold text-pink-700">${p.author === 'Leslie' ? '🌸 Leslie (🇩🇪)' : '🦊 Arturo (🇲🇽)'}</span>
+                  <div class="flex items-center gap-2">
+                    <span>${p.createdAt || ''}</span>
+                    <button onclick="deletePolaroid('${p.id}')" class="text-gray-300 hover:text-rose-500" title="Borrar foto">✕</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 4. Renderizar Cartas del Sombrerero
+      const lettersBox = document.getElementById('lettersContainer');
+      lettersBox.innerHTML = appState.letters.map((l, idx) => `
+        <div onclick="readLetter(${idx})" class="bg-white hover:bg-amber-50/40 cursor-pointer rounded-2xl p-4 shadow-sm border border-teal-100 flex items-center justify-between gap-3 transition active:scale-98">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-full bg-rose-600 text-white flex items-center justify-center text-lg shadow-inner border-2 border-rose-300 shrink-0">
+              🕯️
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-teal-700">${l.badge}</span>
+              <h4 class="font-serif-title font-bold text-sm text-gray-800 leading-snug">${l.title}</h4>
+              <p class="text-[11px] text-gray-400 mt-0.5">De: ${l.author} • ${l.date}</p>
+            </div>
+          </div>
+          <span class="text-teal-600 font-bold text-xs shrink-0">Abrir →</span>
+        </div>
+      `).join('');
+    }
+
+    // Iniciar relojes y sincronización
+    updateClocks();
+    setInterval(updateClocks, 15000);
+    renderAll();
+    initCloudSync();
+  </script>
+</body>
+</html>
